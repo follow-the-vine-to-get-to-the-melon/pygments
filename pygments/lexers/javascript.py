@@ -15,7 +15,7 @@ from pygments.lexer import RegexLexer, include, bygroups, default, using, \
     this, words, combined
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Other
-from pygments.util import get_bool_opt, iteritems
+from pygments.util import get_bool_opt
 import pygments.unistring as uni
 
 __all__ = ['JavascriptLexer', 'KalLexer', 'LiveScriptLexer', 'DartLexer',
@@ -340,7 +340,7 @@ class LiveScriptLexer(RegexLexer):
 
 class DartLexer(RegexLexer):
     """
-    For `Dart <http://dartlang.org/>`_ source code.
+    For `Dart <http://dart.dev/>`_ source code.
 
     .. versionadded:: 1.5
     """
@@ -361,15 +361,16 @@ class DartLexer(RegexLexer):
             (r'[^\S\n]+', Text),
             (r'//.*?\n', Comment.Single),
             (r'/\*.*?\*/', Comment.Multiline),
-            (r'\b(class)\b(\s+)',
+            (r'\b(class|extension|mixin)\b(\s+)',
              bygroups(Keyword.Declaration, Text), 'class'),
-            (r'\b(assert|break|case|catch|continue|default|do|else|finally|for|'
-             r'if|in|is|new|return|super|switch|this|throw|try|while)\b',
+            (r'\b(as|assert|break|case|catch|const|continue|default|do|else|finally|'
+             r'for|if|in|is|new|rethrow|return|super|switch|this|throw|try|while)\b',
              Keyword),
-            (r'\b(abstract|async|await|const|extends|factory|final|get|'
-             r'implements|native|operator|set|static|sync|typedef|var|with|'
-             r'yield)\b', Keyword.Declaration),
-            (r'\b(bool|double|dynamic|int|num|Object|String|void)\b', Keyword.Type),
+            (r'\b(abstract|async|await|const|covariant|extends|external|factory|final|'
+             r'get|implements|late|native|on|operator|required|set|static|sync|typedef|'
+             r'var|with|yield)\b', Keyword.Declaration),
+            (r'\b(bool|double|dynamic|int|num|Function|Never|Null|Object|String|void)\b',
+             Keyword.Type),
             (r'\b(false|null|true)\b', Keyword.Constant),
             (r'[~!%^&*+=|?:<>/-]|as\b', Operator),
             (r'@[a-zA-Z_$]\w*', Name.Decorator),
@@ -389,7 +390,7 @@ class DartLexer(RegexLexer):
         'import_decl': [
             include('string_literal'),
             (r'\s+', Text),
-            (r'\b(as|show|hide)\b', Keyword),
+            (r'\b(as|deferred|show|hide)\b', Keyword),
             (r'[a-zA-Z_$]\w*', Name),
             (r'\,', Punctuation),
             (r'\;', Punctuation, '#pop')
@@ -767,9 +768,9 @@ class LassoLexer(RegexLexer):
         self._members = set()
         if self.builtinshighlighting:
             from pygments.lexers._lasso_builtins import BUILTINS, MEMBERS
-            for key, value in iteritems(BUILTINS):
+            for key, value in BUILTINS.items():
                 self._builtins.update(value)
-            for key, value in iteritems(MEMBERS):
+            for key, value in MEMBERS.items():
                 self._members.update(value)
         RegexLexer.__init__(self, **options)
 
